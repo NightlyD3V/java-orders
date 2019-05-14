@@ -3,8 +3,6 @@ package com.lambda.javaorders.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "odrers")
@@ -15,27 +13,27 @@ public class Orders
     private long orderid;
 
     @Column(nullable = false)
-    private long ordnum;
     private double ordamount;
     private double advanceamount;
     private String orddescription;
 
     //one to many relationships
-    @OneToMany(mappedBy = "customers", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "customersid", nullable = false)
     @JsonIgnoreProperties("customers")
-    private List<Customers> custcode = new ArrayList<>();
+    private Customers custcode = new Customers();
 
-    @OneToMany(mappedBy = "agents", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "agentid", nullable = false)
     @JsonIgnoreProperties("agents")
-    private List<Agents> agentcode = new ArrayList<>();
+    private Agents agentcode = new Agents();
 
     public Orders()
     {
     }
 
-    public Orders(long ordnum, double ordamount, double advanceamount, String orddescription, List<Customers> custcode, List<Agents> agentcode)
+    public Orders(double ordamount, double advanceamount, Customers custcode, Agents agentcode, String orddescription)
     {
-        this.ordnum = ordnum;
         this.ordamount = ordamount;
         this.advanceamount = advanceamount;
         this.orddescription = orddescription;
@@ -51,16 +49,6 @@ public class Orders
     public void setOrderid(long orderid)
     {
         this.orderid = orderid;
-    }
-
-    public long getOrdnum()
-    {
-        return ordnum;
-    }
-
-    public void setOrdnum(long ordnum)
-    {
-        this.ordnum = ordnum;
     }
 
     public double getOrdamount()
@@ -93,22 +81,22 @@ public class Orders
         this.orddescription = orddescription;
     }
 
-    public List<Customers> getCustcode()
+    public Customers getCustcode()
     {
         return custcode;
     }
 
-    public void setCustcode(List<Customers> custcode)
+    public void setCustcode(Customers custcode)
     {
         this.custcode = custcode;
     }
 
-    public List<Agents> getAgentcode()
+    public Agents getAgentcode()
     {
         return agentcode;
     }
 
-    public void setAgentcode(List<Agents> agentcode)
+    public void setAgentcode(Agents agentcode)
     {
         this.agentcode = agentcode;
     }

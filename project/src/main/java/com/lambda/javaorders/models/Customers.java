@@ -1,11 +1,8 @@
 package com.lambda.javaorders.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.aspectj.weaver.loadtime.Agent;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "customers")
@@ -28,15 +25,16 @@ public class Customers
     private String phone;
 
     //one to many relationships
-    @OneToMany(mappedBy = "agents", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("agents")
-    private List<Agent> agents = new ArrayList<>();
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "agentid", nullable = false)
+    @JsonIgnoreProperties({"agents", "hibernateLAZYInitializer"})
+    private Agents agents = new Agents();
 
     public Customers()
     {
     }
 
-    public Customers(String custname, String custcity, String workingarea, String custcountry, String grade, double openingamt, double receiveamt, double paymentamt, double outstandingamt, String phone, List<Agent> agents)
+    public Customers(String custname, String custcity, String workingarea, String custcountry, String grade, double openingamt, double receiveamt, double paymentamt, double outstandingamt, String phone, Agents agents)
     {
         this.custname = custname;
         this.custcity = custcity;
@@ -161,12 +159,12 @@ public class Customers
         this.phone = phone;
     }
 
-    public List<Agent> getAgents()
+    public Agents getAgents()
     {
         return agents;
     }
 
-    public void setAgents(List<Agent> agents)
+    public void setAgents(Agents agents)
     {
         this.agents = agents;
     }
